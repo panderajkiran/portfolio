@@ -51,13 +51,17 @@ function Navigation() {
           scrolled ? "h-14 rounded-full border border-border bg-background/90 shadow-soft backdrop-blur-xl" : "h-16"
         }`}
       >
-        <a href="#home" aria-label="Pande Raj Kiran, home" className="flex items-center gap-3 font-semibold">
-          <span className="grid size-9 place-items-center rounded-full bg-foreground text-xs text-background">PK</span>
+        <a href="#home" aria-label="Pande Raj Kiran, home" className="group flex items-center gap-3 font-semibold transition-colors hover:text-accent">
+          <span className="grid size-9 place-items-center rounded-full bg-foreground text-xs text-background transition-colors group-hover:bg-accent group-hover:text-accent-foreground">PK</span>
           <span className="hidden sm:inline">Pande Raj Kiran</span>
         </a>
         <div className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
           {navItems.map((item) => (
-            <a key={item.href} href={item.href} className="transition-colors hover:text-foreground">
+            <a
+              key={item.href}
+              href={item.href}
+              className="font-medium transition-colors duration-200 hover:text-accent"
+            >
               {item.label}
             </a>
           ))}
@@ -90,7 +94,7 @@ function Navigation() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="flex items-center justify-between rounded-xl px-3 py-3 text-lg hover:bg-secondary"
+                className="flex items-center justify-between rounded-xl px-3 py-3 text-lg transition-colors hover:bg-secondary hover:text-accent"
               >
                 {item.label}<ArrowDownRight className="size-4" />
               </a>
@@ -110,7 +114,9 @@ function CustomCursor() {
     if (!window.matchMedia("(pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const onMove = (event: MouseEvent) => {
       setPosition({ x: event.clientX, y: event.clientY });
-      setActive(Boolean((event.target as HTMLElement).closest("a, button")));
+      const target = event.target as HTMLElement;
+      const isNav = Boolean(target.closest("nav, header"));
+      setActive(!isNav && Boolean(target.closest("a, button")));
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
@@ -119,15 +125,13 @@ function CustomCursor() {
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none fixed left-0 top-0 z-[100] hidden rounded-full border transition-[width,height] duration-200 lg:grid ${
+      className={`pointer-events-none fixed left-0 top-0 z-[100] hidden rounded-full border transition-[width,height,transform] duration-150 lg:grid ${
         active
-          ? "size-14 place-items-center border-accent bg-accent/20 backdrop-blur-sm"
+          ? "size-8 place-items-center border-accent bg-accent/15 backdrop-blur-sm"
           : "size-3 border-foreground bg-background/80 backdrop-blur-sm"
       }`}
-      style={{ transform: `translate3d(${position.x - (active ? 28 : 6)}px, ${position.y - (active ? 28 : 6)}px, 0)` }}
-    >
-      {active && <span className="text-[0.55rem] font-bold uppercase text-foreground">Open</span>}
-    </div>
+      style={{ transform: `translate3d(${position.x - (active ? 16 : 6)}px, ${position.y - (active ? 16 : 6)}px, 0)` }}
+    />
   );
 }
 
@@ -664,7 +668,7 @@ export function ProjectDetail({ slug }: { slug: string }) {
 
   return (
     <main>
-      <div className="page-shell py-6"><Link to="/" className="inline-flex items-center gap-3 text-sm font-semibold"><span className="grid size-9 place-items-center rounded-full bg-foreground text-xs text-background">PK</span> Back home</Link></div>
+      <div className="page-shell py-6"><Link to="/" className="group inline-flex items-center gap-3 text-sm font-semibold transition-colors hover:text-accent"><span className="grid size-9 place-items-center rounded-full bg-foreground text-xs text-background transition-colors group-hover:bg-accent group-hover:text-accent-foreground">PK</span> Back home</Link></div>
       <article className="page-shell pb-16 pt-16 md:pb-28 md:pt-24">
         <p className="text-xs font-semibold uppercase text-muted-foreground">{project.index} / {project.category}</p>
         <h1 className="mt-7 max-w-5xl font-display text-6xl leading-[0.9] md:text-9xl">{project.title}</h1>
