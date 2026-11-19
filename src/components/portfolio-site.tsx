@@ -106,35 +106,6 @@ function Navigation() {
   );
 }
 
-function CustomCursor() {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
-  const [active, setActive] = useState(false);
-
-  useEffect(() => {
-    if (!window.matchMedia("(pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const onMove = (event: MouseEvent) => {
-      setPosition({ x: event.clientX, y: event.clientY });
-      const target = event.target as HTMLElement;
-      const isNav = Boolean(target.closest("nav, header"));
-      setActive(!isNav && Boolean(target.closest("a, button")));
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, []);
-
-  return (
-    <div
-      aria-hidden="true"
-      className={`pointer-events-none fixed left-0 top-0 z-[100] hidden rounded-full border transition-[width,height,transform] duration-150 lg:grid ${
-        active
-          ? "size-8 place-items-center border-accent bg-accent/15 backdrop-blur-sm"
-          : "size-3 border-foreground bg-background/80 backdrop-blur-sm"
-      }`}
-      style={{ transform: `translate3d(${position.x - (active ? 16 : 6)}px, ${position.y - (active ? 16 : 6)}px, 0)` }}
-    />
-  );
-}
-
 function SectionIntro({ label, title }: { label: string; title: string }) {
   return (
     <div className="grid gap-6 border-t border-border pt-6 md:grid-cols-[0.34fr_1fr]">
@@ -646,7 +617,6 @@ function Footer() {
 export function PortfolioSite() {
   return (
     <main className="overflow-hidden">
-      <CustomCursor />
       <Navigation />
       <Hero />
       <TechStrip />
